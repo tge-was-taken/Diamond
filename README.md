@@ -27,3 +27,9 @@ Currently non-functional and used only for research.
 ## Diamond.Fury
 
 A C++ ASI module that injects client-side enhancements into the game.
+
+### Building
+- Add 'MARTIALHEROES_DIR' environment variable and set it to the full path of the game install.
+- Copy 'Diamond.Fury.ini' to the game directory and change settings to your liking
+- Build the solution
+  - Optionally: run the solution; it will boot the game with the debugger and module attached
