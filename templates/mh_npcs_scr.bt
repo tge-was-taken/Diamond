@@ -1,0 +1,94 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+//#include "mh_items_enum.bt"
+#ifndef MH_ITEMS_ENUM_H
+typedef enum<uint> { } ItemId;
+#define MH_ITEMS_ENUM_H
+#endif
+
+#include "mh_quests_enum.bt"
+
+// hardcoded size of 0x77C
+typedef struct 
+{
+    uint unk;
+    ItemId itemId;
+    uint unk2[2];
+} NpcsScrEntryInventoryItem <read=(EnumToString(itemId))>;
+
+typedef struct {
+    local long start = FTell();
+    local long end = start + 0x77C;
+    ushort id;
+    char name[17];
+    char title[33];
+    uchar unk[64];
+    ushort modelId; 
+    ushort npcType; 
+    uint unk4;
+    NpcsScrEntryInventoryItem inventory[60];
+    QuestId giveQuest;
+    QuestId giveQuest2;
+    QuestId giveQuest3;
+    QuestId giveQuest4;
+    QuestId giveQuest5;
+    QuestId giveQuest6;
+    uint unk8_3;
+    uint unk9; // some ID?
+    uint unk10[3];
+    uint unk11; // some ID?
+    uint unk12[7];
+    QuestId rewardQuest; 
+    ushort unk14; // ID?
+    uint unk15;
+    ubyte unk16[4]; // flags
+    ushort unk17;
+    QuestId rewardQuest2;
+    ubyte unk19_1; // flags?
+    ubyte unk19_2; // flags?
+    ubyte unk19_3; // flags?
+    ubyte unk19_4; // flags?
+    uint defaultDialogId;
+    uint eventDialogId; // event npcs
+    uint idleDialogId;
+    uint questDialogId; 
+    uint questDialogId2;
+    uint unk24[16];
+    char map[20];
+    char location[20];
+    char category[22];
+    char category2[602];
+    FSeek(end);
+} NpcsScrEntry <bgcolor=cRed, optimize=false,read=(Str("#%d %s [%s]", id, name, title))>;
+
+typedef struct {
+    local int entryCount = FileSize() / 0x77C;
+    NpcsScrEntry entries[entryCount];
+} NpcsScrFile;
+
+NpcsScrFile file;
+
+void DumpCsv()
+{
+    local int i;
+    local int entryCount = file.entryCount;
+    local int f = FileNew("Text");
+    FPrintf(f, "id,name\n");
+    for (i = 0; i < entryCount; ++i)
+    {
+        FPrintf(f, "%d,\"%s\"\n", file.entries[i].id, file.entries[i].name);
+    }
+}
+
+DumpCsv();

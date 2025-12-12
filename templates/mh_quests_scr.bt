@@ -1,0 +1,144 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "mh_mobs_enum.bt"
+//typedef enum<ushort> {}MobId;
+
+// hardcoded size of 0xF0
+typedef struct {
+    local long start = FTell();
+    local long end = start + 0xF0;
+    char name[62];
+    ushort unk2;
+    uint count; // number of mobds to kill or othr
+    uint unk[3];
+    MobId mobId;
+    ushort unk10;
+    uint unk3[5];
+    uint itemId; // maybe?
+    uint unk5[4];
+    char description[68];
+    uint exp; // maybe?
+    uint fame; // maybe?
+    uint gold; // maybe?
+    uint unk9[9]; 
+    FSeek(end);
+} QuestScrEntryStep <bgcolor=cYellow, optimize=false,read=(Str("%s", name))>;
+
+typedef enum<byte> {
+    None = 0,
+    Law = 1,
+    Chaos = 2,
+} FactionId;
+
+// hardcoded size of 0x1360
+typedef struct {
+    local long start = FTell();
+    local long end = start + 0x1360;
+    ushort id;
+    ubyte unk;
+    char name[61];
+    ubyte unk1Count; 
+    ubyte unk1[7];
+    uint messageIds[5]; // npc.scr
+    uint unk3_0; // 0
+    uint unk3_1;
+    uint stepCount;
+    QuestScrEntryStep steps[20];
+    ubyte unk5_0; // event? set only for hunting time
+    ubyte unk5_1; // event? set only for hunting time
+    ubyte unk5_2; // event?
+    ubyte unk5_3; // 0
+    ubyte unk5_4; // 0
+    ubyte unk5_5; // 0
+    ubyte unk5_6; // 0
+    ubyte unk5_7; // 0
+    ubyte unk5_8; // 0
+    ubyte unk5_9; // 0
+    ubyte unk5_10; // 0
+    ubyte unk5_11; // 0
+    int unk5_12; // negative number set for some quests
+    ubyte unk5_16; // 0
+    ubyte unk5_17; // 0
+    ubyte unk5_18; // 0
+    ubyte unk5_19; // 0
+    ubyte unk5_20; // 0
+    ubyte unk5_21; // 0
+    ubyte unk5_22; // 0
+    ubyte unk5_23; // 0
+    ubyte unk5_24; // 0
+    ubyte unk5_25; // 0
+    ubyte unk5_26; // 0
+    ubyte unk5_27; // 0
+    ubyte factionQuestType; // 1: lv12 class quest, 2: join faction quest
+    FactionId factionAfterCompletion; // faction change quests
+    ubyte unk5_30; // 0
+    ubyte unk5_31; // 0
+    ubyte unk5_32; // 0
+    ubyte unk5_33; // 0
+    ubyte unk5_34; // 0
+    ubyte unk5_35; // 0
+    ubyte unk5_36; // 0
+    ubyte unk5_37; // 0
+    ubyte unk5_38; // 0
+    ubyte unk5_39; // 0
+    ushort minLv;
+    ushort maxLv;
+    ubyte unk6;
+    ubyte allowWarrior;
+    ubyte allowAssassin;
+    ubyte allowMage;
+    ubyte allowMonk;
+    FactionId requiredFaction;
+    ubyte unk7; // 0, 1, 2
+    ubyte unk8; // 0,1,2,3
+    ubyte unk9; // 2 if punish murderer quest
+    ubyte isEvent;
+    ubyte unk11; //always 0
+    ubyte unk12; 
+    FSeek(end);
+    
+    //Assert(unk5[2]==0); // event?
+    Assert(unk3_0==0);
+    Assert(unk3_1==0);
+    Assert(unk6==0);
+    Assert(unk7==0||unk7==1||unk7==2);
+    Assert(unk8==0||unk8==1||unk8==2||unk8==3||unk8==7||unk8==8);
+    Assert(unk9==0||unk9==2);
+    Assert(isEvent==0 || isEvent==1);
+    Assert(unk11==0);
+    Assert(unk12==0);
+    if(unk3_1!=0)Printf("%d %s\n", unk5_29, name);
+    //Assert(unk7[0]==0||unk7[0]==1||unk7[0]==8);
+} QuestScrEntry <bgcolor=cRed, optimize=false,read=(Str("#%d '%s' lv%d~%d %d steps [%s..]", id, name, minLv, maxLv, stepCount, steps[0].name))>;
+
+typedef struct {
+    local int entryCount = FileSize() / 0x1360;
+    QuestScrEntry entries[entryCount];
+} QuestScrFile;
+
+QuestScrFile file;
+
+void DumpCsv()
+{
+    local int i;
+    local int entryCount = file.entryCount;
+
+    Printf("id,name,lastStep\n");
+    for (i = 0; i < entryCount; ++i)
+    {
+        Printf("%d,\"%s\",\"%s\"\n", file.entries[i].id, file.entries[i].name, 
+            file.entries[i].steps[file.entries[i].stepCount-1].name);
+    }
+}
+DumpCsv();

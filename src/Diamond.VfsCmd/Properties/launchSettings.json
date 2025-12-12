@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Diamond.VfsCmd": {
+      "commandName": "Project",
+      "commandLineArgs": "extract \"C:\\d.o online\\data.inf\" \"C:\\d.o online\\data\\data.vfs\" out_do_test"
+    }
+  }
+}

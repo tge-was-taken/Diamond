@@ -1,0 +1,31 @@
+//------------------------------------------------
+//--- 010 Editor v15.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "mh_mobs_enum.bt"
+
+typedef struct {
+    MobId mobId; // ushort
+    ushort f2;
+    float x;
+    float y;
+    float dx;
+    float dy;
+    local float radius = Sqrt(dx * dx + dy * dy);
+    Printf("%s\t%f\t%f\t%f\n", EnumToString(mobId), x, y, radius);
+} MobArrEntry <optimize=false, read=(Str("#%d %s (%f, %f) %f", mobId, EnumToString(mobId), x, y, radius))>;
+
+typedef struct {
+    MobArrEntry entries[FileSize()/20];
+} MobArrFile;
+
+MobArrFile file;

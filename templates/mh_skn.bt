@@ -1,0 +1,54 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    int index;
+    float u;
+    float v;
+} SknFaceVertex <bgcolor=cLtYellow>;
+
+typedef struct {
+    SknFaceVertex v[3];
+} SknFace <optimize=false, bgcolor=cYellow>;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+} SknVector3 <bgcolor=cLtGreen>;
+
+typedef struct {
+    SknVector3 normal;
+    SknVector3 position;
+} SknVertex <bgcolor=cGreen>;
+
+typedef struct {
+    uint vertexId;
+    uint boneId;
+    float weight;
+} SknWeight <optimize=false, bgcolor=cLtBlue>;
+
+typedef struct {
+    uint texId;
+    uint bndId;
+    uint meshNameLength;
+    char meshName[meshNameLength];
+    uint faceCount;
+    SknFace faces[faceCount];
+    uint vertexCount;
+    SknVertex vertices[vertexCount];
+    uint weightCount;
+    SknWeight weights[weightCount];
+} SknFile <optimize=false, bgcolor=cLtGreen>;
+
+SknFile file;

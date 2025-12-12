@@ -1,0 +1,36 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: mh_bnd.bt
+//   Authors: TGE
+//   Version: 1.0
+//   Purpose: Parse Martial Heroes .bnd files.
+//  Category: Game / Skeleton
+// File Mask: *.bnd
+//  ID Bytes: N/A
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    uint id;                
+    uint parentId;          
+    float posX;             
+    float posY;             
+    float posZ;             
+    float quatX;            
+    float quatY;            
+    float quatZ;            
+    float quatW;            
+} BndBone <bgcolor=cLtYellow>;
+
+typedef struct {
+    uint id; // g<id>.bnd               
+    uint nameLength;      
+    char name[nameLength]; 
+    uint boneCount;         
+
+    BndBone bones[boneCount]; 
+    uint unk2; // 0?
+} BndFile <optimize=false, bgcolor=cLtGreen>;
+
+BndFile file;

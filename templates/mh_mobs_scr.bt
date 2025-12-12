@@ -1,0 +1,274 @@
+//------------------------------------------------
+//--- 010 Editor v15.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    ushort id;
+    char name[17];
+    char location[33];
+    uint subarea;
+    unsigned int unk2_0;
+    float baseFame;
+    unsigned int unk2_2;
+    unsigned int unk2_3;
+    unsigned int unk2_4;
+    unsigned int unk2_5;
+    unsigned int unk2_6;
+    uint lv;
+    byte unk[364];
+} MobsScrEntry1 <read=(Str("%d %s", id, name))>;
+
+typedef struct {
+    local int entryCount = FileSize()/452;
+    MobsScrEntry1 entries[entryCount];
+} MobsScrFile1;
+
+typedef struct {
+    ushort id;
+    char name[17];
+    char location[33];
+    uint subarea;
+    unsigned int unk2_0;
+    float baseFame;
+    unsigned int unk2_2;
+    unsigned int unk2_3;
+    unsigned int unk2_4;
+    unsigned int unk2_5;
+    unsigned int unk2_6;
+    uint lv;
+    unsigned int unk_0;
+    ushort unk_1;
+    ushort unk_1_2;
+    unsigned int unk_2;
+    unsigned int unk_3;
+    unsigned int unk_4;
+    unsigned int unk_5;
+    unsigned int unk_6;
+    unsigned int unk_7;
+    unsigned int unk_8;
+    unsigned int unk_9;
+    unsigned int unk_10;
+    unsigned int unk_11;
+    unsigned int unk_12;
+    unsigned int unk_13;
+    unsigned int unk_14;
+    unsigned int unk_15;
+    unsigned int unk_16;
+    unsigned int unk_17;
+    unsigned int unk_18;
+    unsigned int unk_19;
+    unsigned int unk_20;
+    unsigned int unk_21;
+    unsigned int unk_22;
+    unsigned int unk_23;
+    unsigned int unk_24;
+    float unk_25;
+    unsigned int unk_26;
+    unsigned int unk_27;
+    unsigned int unk_28;
+    unsigned int unk_29;
+    unsigned int unk_30;
+    unsigned int unk_31;
+    uint unk_32;
+    float unk_33;
+    float unk_34;
+    unsigned int unk_35;
+    unsigned int minAtk;
+    unsigned int maxAtk;
+    unsigned int unk_38;
+    unsigned int unk_39;
+    unsigned int hp;
+    unsigned int unk_41;
+    unsigned int atksuc;
+    unsigned int defsuc;
+    unsigned int unk_44;
+    unsigned int unk_45;
+    float unk_46;
+    float unk_47;
+    float unk_48;
+    float unk_49;
+    float unk_50;
+    float unk_51;
+    float unk_52;
+    float unk_53;
+    float unk_54;
+    float unk_55;
+    float unk_56;
+    float unk_57;
+    float unk_58;
+    float unk_59;
+    float unk_60;
+    float unk_61;
+    unsigned int unk_62;
+    unsigned int unk_63;
+    unsigned int unk_64;
+    unsigned int unk_65;
+    unsigned int unk_66;
+    unsigned int unk_67;
+    unsigned int unk_68;
+    unsigned int unk_69;
+    unsigned int unk_70;
+    unsigned int unk_71;
+    unsigned int unk_72;
+    unsigned int unk_73;
+    unsigned int coins;
+    unsigned int unk_75;
+    unsigned int unk_76;
+    float unk_77;
+    float unk_78;
+    unsigned int skill1;
+    unsigned int skill2;
+    unsigned int skill3;
+    unsigned int unk_82;
+    unsigned int unk_83;
+    unsigned int unk_84;
+    unsigned int unk_85;
+    unsigned int unk_86;
+    unsigned int unk_87;
+    unsigned int unk_88;
+    float unk_89;
+    float unk_90;
+    float unk_91;
+    unsigned int unk_92;
+    ushort unk_93;
+    ushort unk_93_2;
+    ushort unk_94;
+    ushort unk_94_2;
+    unsigned int unk_95;
+    unsigned int unk_96;
+    ushort unk_97;
+    ushort unk_97_2;
+    unsigned int unk_98;
+    unsigned int unk_99;
+    //Printf("%d\t\"%s\"\t%d\t\"%s\"\n", id, name, lv, location);
+} MobsScrEntry2 <optimize=false, read=(Str("%d %s", id, name))>;
+
+typedef struct {
+    local int entryCount = FileSize()/488;
+    MobsScrEntry2 entries[entryCount];
+} MobsScrFile2;
+
+// Struct to store used names (since arrays of string are not allowed)
+struct StringHolder {
+    string value;
+};
+
+string MakeValidIdentifier(char s[])
+{
+    local string result;
+    local int len;
+    local int i;
+    local char c;
+
+    result = "";
+    len = Strlen(s);
+
+    if (len == 0)
+        return "_";
+
+    // Replace invalid characters with underscores
+    for (i = 0; i < len; i++)
+    {
+        c = s[i];
+
+        if ((c >= 'A' && c <= 'Z') ||
+            (c >= 'a' && c <= 'z') ||
+            (c >= '0' && c <= '9') ||
+            (c == '_'))
+        {
+            result += c;
+        }
+        else
+        {
+            result += "_";
+        }
+    }
+
+    // Ensure first character is valid (must start with letter or underscore)
+    c = result[0];
+    if (!((c >= 'A' && c <= 'Z') ||
+          (c >= 'a' && c <= 'z') ||
+          (c == '_')))
+    {
+        result = "_" + SubStr(result, 1, -1);
+    }
+
+    return result;
+}
+
+local StringHolder usedNames[4096];  // Struct array
+
+void DumpEnum()
+{
+    local int i;
+    local int j;
+    local int count;
+    local int usedCount;
+    local int found;
+    local string name;
+    local string finalName;
+    local int entryCount;
+
+    usedCount = 0;
+    entryCount = file.entryCount;
+
+    Printf("typedef enum {\n");
+
+    for (i = 0; i < entryCount; ++i)
+    {
+        name = MakeValidIdentifier(file.entries[i].name);
+        finalName = name;
+        count = 1;
+
+        // Handle duplicate names
+        while (true)
+        {
+            found = 0;
+
+            for (j = 0; j < usedCount; j++)
+            {
+                if (Strcmp(usedNames[j].value, finalName) == 0)
+                {
+                    found = 1;
+                    break;
+                }
+            }
+
+            if (!found)
+                break;
+
+            count++;
+            finalName = Str("%s_%d", name, count);
+        }
+
+        // Record this name
+        usedNames[usedCount].value = finalName;
+        usedCount++;
+
+        Printf("    %s = %d, // '%s'\n",
+               finalName, file.entries[i].id, file.entries[i].name);
+    }
+
+    Printf("} MobId;\n");
+}
+
+// TODO improve check
+//Printf("%X", FileSize());
+local int version = FileSize() == 0x11AF10 ? 1 : 2;
+
+if (version == 1) {
+    MobsScrFile1 file;
+} else if (version == 2) {
+    MobsScrFile2 file;
+}
+
+//DumpEnum();

@@ -1,0 +1,65 @@
+//------------------------------------------------
+//--- 010 Editor v15.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    uint magic1;
+    uint magic2;
+    uint f08;
+    uint fileCount;
+    uint vfsFileSize;
+} InfHeader1;
+
+typedef struct {
+    char fileName[100];
+    uint offset;
+    uint size;
+    uint f6c;
+    uint f70;
+    uint f74;
+    uint f78;
+    uint f7c;
+    uint f80;
+} InfEntry1 <read=(fileName), optimize=false>;
+
+typedef struct {
+    uint magic1; // 30534656
+    uint magic2; // 02003130
+    uint f08; // 0
+    uint fileCount;
+    uint64 vfsFileSize;
+} InfHeader2;
+
+typedef struct{
+    char fileName[104];
+    uint64 offset;  
+    uint64 size;
+    uint64 hash[3];
+} InfEntry2 <read=(fileName), optimize=false>;
+
+struct InfFile {
+    local uint version = 1;
+    if (ReadInt(0x14) == 0) {
+        version = 2;
+    }
+    if (version == 1) {
+        // old
+        InfHeader1 header;
+        InfEntry1 entries[header.fileCount];
+    } else {
+        // new
+        InfHeader2 header;
+        InfEntry2 entries[header.fileCount];   
+    }
+};
+
+InfFile file;

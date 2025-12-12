@@ -1,0 +1,42 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float nx;
+    float ny;
+    float nz;
+    float u;
+    float v;
+} BudVertex;
+
+typedef struct {
+    uchar unk0;
+    uchar unk1; // material ID?
+    uchar unk2;
+    uchar unk3;
+    uchar unk4;
+    uint vertexCount;
+    BudVertex vertices[vertexCount];
+    uint indexCount;
+    ushort indices[indexCount];
+} BudMesh <optimize=false, bgcolor=cGreen>;
+
+typedef struct {
+    uint meshCount;
+    BudMesh meshes[meshCount];
+} BudFile;
+
+BudFile file;

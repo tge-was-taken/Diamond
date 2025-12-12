@@ -1,0 +1,81 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct(uint size) {
+    local long start = FTell();
+    local long end = start+size;
+    char name[52];
+    uint id;
+    uint unk1[18];
+    uint baseId;
+    uint categoryId; // guess?
+    FSeek(end);
+} ItemsScrEntry <bgcolor=cYellow,optimize=false,read=(Str("#%d '%s'", id, name))>;
+
+typedef struct {
+    local int entryCount = 0;
+    while (FTell()<FileSize()) {
+        ItemsScrEntry entries(0x224);
+        
+        if (FTell()+0x244 < FileSize()) {
+            if (    
+                    ReadUInt(FTell()+0x34) < 100000000 || // ID
+                    ReadUInt(FTell()+0x80) < 100000000 // BaseID
+               ) 
+            {
+                struct {
+                    uchar unk[8];
+                } UnkData;
+                if (FTell()+0x244 < FileSize()) {
+                    if (
+                            ReadUInt(FTell()+0x34) < 100000000 || // ID
+                            ReadUInt(FTell()+0x80) < 100000000 // BaseID
+                       ) 
+                    {
+                        struct {
+                            uchar unk[8];
+                        } UnkData;
+                        if (FTell()+0x244 < FileSize()) {
+                            if (
+                                    ReadUInt(FTell()+0x34) < 100000000 || // ID
+                                    ReadUInt(FTell()+0x80) < 100000000 // BaseID
+                               ) 
+                            {
+                                struct {
+                                    uchar unk[8];
+                                } UnkData;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        entryCount++;
+    }
+} ItemsScrFile;
+
+ItemsScrFile file;
+
+void DumpCsv()
+{
+    local int i;
+    local int entryCount = file.entryCount;
+
+    Printf("id,name\n");
+    for (i = 0; i < entryCount; ++i)
+    {
+        Printf("%d,\"%s\"\n", file.entries[i].id, file.entries[i].name);
+    }
+}
+
+//DumpCsv();

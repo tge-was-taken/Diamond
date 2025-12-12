@@ -1,0 +1,32 @@
+//------------------------------------------------
+//--- 010 Editor v15.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "mh_npcs_enum.bt"
+
+typedef struct {
+    NpcId npcId; // ushort
+    ushort f2;
+    float x;
+    float y;
+    float angleRadian;
+    uint f3;
+    uint f4;
+    uint f5;
+    local float angleDegrees = angleRadian * (180/3.1415926536);
+} NpcArrEntry <optimize=false, read=(Str("#%d %s (%f, %f) %f [%f]", npcId, EnumToString(npcId), x, y, angleRadian, angleDegrees))>;
+
+typedef struct {
+    NpcArrEntry entries[FileSize()/28];
+} NpcArrFile;
+
+NpcArrFile file;

@@ -1,0 +1,43 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    float x, y, z;
+} MotVec3;
+
+typedef struct {
+    float x, y, z, w;
+} MotQuat;
+
+typedef struct {
+    MotVec3 translation;
+    MotQuat rotation;
+} MotKey <bgcolor=cGreen>;
+
+typedef struct {
+    uint id;
+    uint keyCount;
+    MotKey keys[keyCount];
+} MotBone <optimize=false,bgcolor=cLtBlue>;
+
+typedef struct {
+    uint id;
+    uint bndId;
+    uint nameLength;
+    char name[nameLength];
+    uint keyCount;
+    uint boneCount;
+    MotBone bones[boneCount];
+} MotFile <optimize=false,bgcolor=cLtGreen>;
+
+MotFile file;

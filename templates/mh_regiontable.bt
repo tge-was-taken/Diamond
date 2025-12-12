@@ -1,0 +1,28 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    char name[32];
+    float x;
+    float y;
+    uint unk1;
+    uint unk2;
+} RegionTableEntry <read=(Str("%s (%f,%f)", name, x, y))>;
+
+typedef struct {
+    local int entryCount = 32;
+    RegionTableEntry entries[entryCount];
+    uint unk[32];
+} RegionTableFile;
+
+RegionTableFile file;

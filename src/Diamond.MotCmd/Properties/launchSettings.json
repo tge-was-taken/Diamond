@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Diamond.MotCmd": {
+      "commandName": "Project",
+      "commandLineArgs": "-i \"F:\\Development\\Diamond\\Diamond.VfsCmd\\bin\\Debug\\net9.0\\out\\data\\char\\mot\" -o \"C:\\Users\\cweer\\Downloads\\Martial_Heroes_20251010\\Martial Heroes\\ddo\\data\\char\\mot\""
+    }
+  }
+}

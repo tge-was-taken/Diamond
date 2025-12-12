@@ -1,0 +1,22 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    uint width;
+    uint height;
+    uchar regionMap[height*width];
+    int originX;
+    int originY;
+} RegionFile;
+
+RegionFile file;
